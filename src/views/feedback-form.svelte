@@ -83,6 +83,7 @@
                 bind:value={questionForm.name}
                 placeholder={"请输入姓名"}
                 clearable={true}
+                autocomplete="off"
             />
         </BeFormItem>
         <BeFormItem label="手机" prop="phoneNumber">
@@ -105,6 +106,7 @@
             <BeInput
                 bind:value={questionForm.email}
                 placeholder={"请输入邮箱"}
+                autocomplete="off"
             />
         </BeFormItem>
         <BeFormItem label="问题描述" prop="desc">
