@@ -1,18 +1,19 @@
 <script>
-    import { BeDialog } from "@brewer/beerui";
+    import BeDialog from "@brewer/beerui/be-dialog";
     import { BeForm, BeFormItem } from "@brewer/beerui/be-form";
     import BeInput from "@brewer/beerui/be-input";
     import BeButton from "@brewer/beerui/be-button";
     import BeTextarea from "@brewer/beerui/be-textarea";
     import { BeSelect, BeOption } from "@brewer/beerui/be-select";
-    import { createEventDispatcher } from "svelte";
 
+    import { createEventDispatcher } from "svelte";
+    import '@brewer/beerui/assets/beer.css'
     export let dialogShow = false;
     const dispatch = createEventDispatcher();
 
     function beforeClose() {
         dispatch("close");
-        resetForm()
+        resetForm();
     }
     let questionForm = {
         questionType: 1,
@@ -131,6 +132,66 @@
 </BeDialog>
 
 <style>
+    .be-dialog {
+        position: relative;
+    }
+    .be-dialog__title {
+        user-select: none;
+    }
+    .be-dialog__mask {
+        background: var(--be-mask-active);
+        height: 100%;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 997;
+    }
+    .be-dialog__container {
+        background: #fff;
+        border-radius: 0.2em;
+        left: 50%;
+        min-width: 32em;
+        overflow: auto;
+        position: fixed;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 30%;
+        z-index: 998;
+    }
+    .be-dialog__header {
+        padding: 20px 20px 10px;
+    }
+    .be-dialog__header.drag {
+        cursor: move;
+    }
+    .be-dialog__close {
+        background: transparent;
+        border: none;
+        color: #8b8b8b;
+        cursor: pointer;
+        font: 700 22px/14px Tahoma, Verdana, sans-serif;
+        outline: none;
+        padding: 0;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        user-select: none;
+    }
+    .be-dialog__close:hover {
+        color: #747373;
+    }
+    .be-dialog__body {
+        color: #606266;
+        font-size: 14px;
+        padding: 30px 20px;
+        word-break: break-all;
+    }
+    .be-dialog__footer {
+        box-sizing: border-box;
+        padding: 10px 20px 20px;
+        text-align: right;
+    }
     :global(.confirmBtn) {
         background: #1863fb;
         border-radius: 2px;
@@ -146,7 +207,7 @@
     :global(.be-dialog__title) {
         text-align: center;
     }
-   
+
     :global(.be-input, .be-input input) {
         cursor: auto;
     }
