@@ -11,7 +11,7 @@
         <div
           v-if="hasValue && searchInput === ''"
           class="fb-select-filterable-value"
-          :class="{'focus': searchInputFocus}"
+          :class="{ focus: searchInputFocus }"
           @click="focusSearchInput"
         >
           {{ singleValue }}
@@ -42,7 +42,7 @@
   </div>
 </template>
 <script>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed, inject } from "vue";
 import fbInput from "./input.vue";
 export default {
   name: "FbSelect",
@@ -67,8 +67,8 @@ export default {
   },
   //   emits: [],
   setup(props, { emit }) {
+    const fbFormItem = inject("fbFormItem");
     let singleValue = ref("");
-
     let showOptions = ref(false);
     const closeOption = () => {
       showOptions.value = false;
@@ -77,6 +77,7 @@ export default {
     const chooseOption = (value) => {
       singleValue.value = value;
       emit("update:modelValue", value);
+      fbFormItem.formItemEmitter.emit('fb.form.change')
       closeOption();
     };
     // searchInput为 filter时 输入的值
@@ -165,7 +166,7 @@ ul {
 }
 .icon-arrow {
   position: absolute;
-  right: 0px;
+  right: 4px;
   top: 35%;
   background-image: url("./arrow-down.svg");
   background-repeat: no-repeat;
@@ -199,7 +200,8 @@ ul {
   font-size: 14px;
   position: absolute;
   line-height: 32px;
-  top: 4px;
+  top: 50%;
+  transform: translate(0, -50%);
   left: 16px;
   z-index: 1;
   white-space: nowrap;
@@ -232,6 +234,6 @@ ul {
   background-color: #f5f7fa;
 }
 .fb-select:hover :deep(.fb-input__inner) {
-border-color: #1863fb;
+  border-color: #1863fb;
 }
 </style>

@@ -6,20 +6,21 @@
       :maxlength="max"
       :disabled="disabled"
       v-bind="$attrs"
-      :value="value"
+      :value="modelValue"
       :placeholder="placeholder"
       @blur="onBlur"
       @change="onChange"
       @input="onInput"
+      @focus="onFocus"
     />
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { getCurrentInstance } from "vue";
 export default {
   name: "FbInput",
   props: {
-    value: {
+    modelValue: {
       type: [String, Number],
       required: true,
     },
@@ -52,38 +53,40 @@ export default {
       },
     },
   },
-  emits: ["update:value", "input", "change", "blur", "focus", "keydown"],
+  emits: ["update:modelValue", "input", "change", "blur", "focus", "keydown"],
   setup(props, { emit }) {
     // const val = ref("");
-
+    const { proxy } = getCurrentInstance();
     // input事件
     const onInput = (event) => {
-      emit("update:value", event.target.value);
+      emit("update:modelValue", event.target.value);
       emit("input", event.target.value);
     };
     // change事件
     const onChange = (event) => {
+      console.log('123', event)
       emit("change", event.target.value);
+      proxy.$pub("ti.form.change");
     };
     // 失去焦点
     const onBlur = (event) => {
       emit("blur", event);
+      proxy.$pub("ti.form.blur");
     };
     // focus事件
-    // const onFocus = (event) => {
-    //   emit("focus", event);
-    // };
+    const onFocus = (event) => {
+      emit("focus", event);
+    };
     const onClear = () => {
       emit("update:value", "");
       emit("change", "");
       focus();
     };
     return {
-      //   val,
       onBlur,
       onChange,
       onInput,
-      //   onFocus,
+      onFocus,
       onClear,
     };
   },
@@ -91,19 +94,19 @@ export default {
 </script>
 <style scoped>
 .fb-input-wrapper {
-    font-size: 14px;
-    display: inline-flex;
-    vertical-align: middle;
-    align-items: center;
-    flex: 1 1 0%;
-    user-select: none;
-    margin: 4px;
-    height: 32px;
-    position: relative;
-    width: 100%;
+  font-size: 14px;
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+  flex: 1 1 0%;
+  user-select: none;
+  /* margin: 4px; */
+  height: 32px;
+  position: relative;
+  width: 100%;
 }
 .fb-input-wrapper .fb-input__inner:focus {
-    border-color: #1863FB;
+  border-color: #1863fb;
 }
 .fb-input-wrapper input.fb-input__inner {
   flex-grow: 1;
@@ -118,7 +121,7 @@ export default {
   width: 100%;
   min-width: 0;
   color: #000;
-  border: 1px solid #DEDEDE;
+  border: 1px solid #dedede;
   transition: border 0.2s ease 0s, color 0.2s ease 0s;
 }
 </style>

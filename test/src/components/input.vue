@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import { ref } from "vue";
+import { getCurrentInstance,inject } from "vue";
 export default {
   name: "FbInput",
   props: {
@@ -56,7 +56,8 @@ export default {
   emits: ["update:modelValue", "input", "change", "blur", "focus", "keydown"],
   setup(props, { emit }) {
     // const val = ref("");
-
+    const { proxy } = getCurrentInstance();
+    const fbFormItem = inject("fbFormItem");
     // input事件
     const onInput = (event) => {
       emit("update:modelValue", event.target.value);
@@ -64,11 +65,16 @@ export default {
     };
     // change事件
     const onChange = (event) => {
+      console.log('123', event)
       emit("change", event.target.value);
+      fbFormItem.formItemEmitter.emit('fb.form.change')
+      // proxy.$pub("fb.form.change");
     };
     // 失去焦点
     const onBlur = (event) => {
       emit("blur", event);
+      fbFormItem.formItemEmitter.emit('fb.form.blur')
+      // proxy.$pub("fb.form.blur");
     };
     // focus事件
     const onFocus = (event) => {
@@ -80,7 +86,6 @@ export default {
       focus();
     };
     return {
-      //   val,
       onBlur,
       onChange,
       onInput,
@@ -98,7 +103,7 @@ export default {
   align-items: center;
   flex: 1 1 0%;
   user-select: none;
-  margin: 4px;
+  /* margin: 4px; */
   height: 32px;
   position: relative;
   width: 100%;
@@ -113,7 +118,7 @@ export default {
   border-radius: 2px;
   font-size: inherit;
   padding: 0px 10px;
-  background-color: transparent;
+  background-color: #fff;
   outline: 0;
   height: inherit;
   width: 100%;
